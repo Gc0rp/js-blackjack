@@ -16,11 +16,31 @@ body{
     letter-spacing: 2px;
 }
 
+.player {
+    display: flex;
+    align-items: center;
+}
+
 .dealers-deck, .players-deck{
     outline: 1px solid red;
     min-height: 200px;
+}
+
+.dealers-deck {
     width: 100%;
 }
+
+.players-deck {
+    flex-grow: 1;
+}
+
+.players-deck img{
+    width: 80px;
+    height: 100px;
+    padding: 10px;
+}
+
+
 
 .btn {
     width: 100px;
