@@ -16,7 +16,7 @@ body{
     letter-spacing: 2px;
 }
 
-.player {
+.player, .dealer {
     display: flex;
     align-items: center;
 }
@@ -34,7 +34,7 @@ body{
     flex-grow: 1;
 }
 
-.players-deck img{
+.players-deck img, .dealers-deck img{
     width: 80px;
     height: 100px;
     padding: 10px;

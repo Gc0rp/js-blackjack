@@ -3,9 +3,11 @@ const prepareDeck = fetch(DECK_URL);
 
 var dealersDeck = document.querySelector(".dealers-deck");
 var deckID;
+var dealerScore = 0; 
 
 var player = document.querySelector(".player");
 var playerDeck = document.querySelector(".players-deck");
+var playerScore = 0;
 
 var dealersOptions = ["hit", "stand"];
 
@@ -18,8 +20,7 @@ prepareDeck.then(function getJSON(response) {
     console.log(deckID);
 });
 
-
-function drawCard(){
+function drawCard(selectedDeck, scoreForDeck) {
     const drawCardURL = "https://deckofcardsapi.com/api/deck/" + deckID + "/draw/?count=1"
 
     fetch(drawCardURL).then(function getJSON(response) {
@@ -29,16 +30,21 @@ function drawCard(){
     .then(function drawCard(json) {
         var img = document.createElement("img");
         img.src = json.cards[0].image;
+        scoreForDeck = scoreForDeck + Number(json.cards[0].value);
 
-        playerDeck.appendChild(img); 
-    }) 
+        (Number(json.cards[0].value) === undefined) ? scoreForDeck + Number(json.cards[0].value) : scoreForDeck = scoreForDeck + 10;
+
+        selectedDeck.appendChild(img); 
+
+        console.log(scoreForDeck);
+    }); 
 }
-
 
 player.addEventListener("click", function(event){
     if(event.target.tagName === "BUTTON"){
         if(event.target.innerText === "Hit"){
-            drawCard();
+            drawCard(playerDeck, playerScore);
+            drawCard(dealersDeck, dealerScore);
         }
     }
 });
