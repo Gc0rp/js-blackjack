@@ -30,13 +30,16 @@ function drawCard(selectedDeck, scoreForDeck) {
     .then(function drawCard(json) {
         var img = document.createElement("img");
         img.src = json.cards[0].image;
-        scoreForDeck = scoreForDeck + Number(json.cards[0].value);
+        // scoreForDeck = scoreForDeck + Number(json.cards[0].value);
 
-        (Number(json.cards[0].value) === undefined) ? scoreForDeck + Number(json.cards[0].value) : scoreForDeck = scoreForDeck + 10;
+        // (Number(json.cards[0].value) === NaN) ? scoreForDeck = scoreForDeck + 10 : scoreForDeck = scoreForDeck + Number(json.cards[0].value);
 
+
+        json.cards[0].value.match(/[A-Z]/g) !== null ? console.log("Face card") : scoreForDeck = scoreForDeck + Number(json.cards[0].value)
+        
         selectedDeck.appendChild(img); 
 
-        console.log(scoreForDeck);
+        console.log(selectedDeck + scoreForDeck);
     }); 
 }
 
