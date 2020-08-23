@@ -43,15 +43,22 @@ body {
     
 }
 
+.score-heading { 
+    order: 1;
+    display: inline-block;
+}
 .score-count {
-    flex: 0 0 20%;
     align-self: flex-start;
 
     font-family: sans-serif;
     font-size: 24px;
     height: 100px;
+    display: inline-block;
+    order: 2;
 
-    order: 1;
+    padding: 3px;
+
+
 }
 
 .btn {
