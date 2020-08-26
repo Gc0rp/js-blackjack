@@ -22,12 +22,6 @@ prepareDeck.then(function getJSON(response) {
     console.log(deckID);
 });
 
-
-// function displayDeck(scoreForDeck, player) {
-//     console.log(scoreCount[1].textContent + scoreForDeck);
-//     (player == "human") ? scoreCount[1].textContent = "Player Score : " + scoreForDeck : scoreCount[0].value = scoreForDeck;
-// }
-
 function drawCard(selectedDeck, scoreForDeck, player) {
     const drawCardURL = "https://deckofcardsapi.com/api/deck/" + deckID + "/draw/?count=1"
 
@@ -38,29 +32,34 @@ function drawCard(selectedDeck, scoreForDeck, player) {
     .then(function drawCard(json) {
         var img = document.createElement("img");
         img.src = json.cards[0].image;
-        // scoreForDeck = scoreForDeck + Number(json.cards[0].value);
-
-        // (Number(json.cards[0].value) === NaN) ? scoreForDeck = scoreForDeck + 10 : scoreForDeck = scoreForDeck + Number(json.cards[0].value);
-
-        (player === "human") ? scoreForDeck = 
-        json.cards[0].value.match(/[A-Z]/g) !== null ? scoreForDeck = scoreForDeck + 10 : scoreForDeck = scoreForDeck + Number(json.cards[0].value)
         
-        selectedDeck.appendChild(img); 
-
-        console.log(scoreForDeck);       
+        json.cards[0].value.match(/[A-Z]/g) !== null ? scoreForDeck =  scoreForDeck + 10: scoreForDeck = scoreForDeck + Number(json.cards[0].value);
+        
+        if(player === "human") {
+            scoreCount[1].innerText = Number(scoreCount[1].innerText) + scoreForDeck;
+        } else {
+            scoreCount[0].innerText = Number(scoreCount[0].innerText) + scoreForDeck;
+        }
+        
+        selectedDeck.appendChild(img);      
     }); 
+}
+
+function resetGame(){
+    playerDeck.innerHTML = "";
+    dealersDeck.innerHTML = "";
+    scoreCount[0].textContent = "0";
+    scoreCount[1].textContent = "0";
 }
 
 
 player.addEventListener("click", function(event){
     if(event.target.tagName === "BUTTON"){
         if(event.target.innerText === "Hit"){
-            drawCard(playerDeck, playerScore);
-            console.log(playerScore);
-            // displayDeck(playerScore, "human");
-
-            drawCard(dealersDeck, dealerScore);
-            // displayDeck(dealerScore, "AI");
+            drawCard(playerDeck, playerScore, "human");
+            drawCard(dealersDeck, dealerScore, "AI");
+        } else if (event.target.innerText === "Play Again") {
+            resetGame();
         }
     }
 });
