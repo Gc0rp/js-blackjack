@@ -12,7 +12,7 @@ var playerScore = 0;
 var dealersOptions = ["hit", "stand"];
 
 var scoreCount = document.querySelectorAll(".score-count");
-var moveMade = document.querySelector(".move-made");
+var display = document.querySelector(".display");
 
 prepareDeck.then(function getJSON(response) {
     const json = response.json();
@@ -39,10 +39,11 @@ function drawCard(selectedDeck, player) {
         
         if(player === "human") {
             scoreCount[1].innerText = Number(scoreCount[1].innerText) + cardScore;
+            gameWon(player, Number(scoreCount[1].innerText));
         } else {
             scoreCount[0].innerText = Number(scoreCount[0].innerText) + cardScore;
+            gameWon(player, Number(scoreCount[0].innerText));
         }
-        
         selectedDeck.appendChild(img);      
     }); 
 }
@@ -55,11 +56,17 @@ function resetGame(){
 }
 
 function displayMove(player, move) {
-    moveMade.innerText = player + " move  : " + move;
+    display.innerText = player + " move  : " + move;
 }
 
 function gameWon(player, score){
-    
+    if(score == 21) {
+        display.innerText = player + " wins. ";
+        setTimeout(resetGame, 1000);
+    } else if (score > 21) {
+        display.innerText = "Bust. " + player + " looses.";
+        setTimeout(resetGame, 1000);
+    }
 }
 
 function AIMove(){
