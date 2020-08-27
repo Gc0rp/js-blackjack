@@ -12,6 +12,7 @@ var playerScore = 0;
 var dealersOptions = ["hit", "stand"];
 
 var scoreCount = document.querySelectorAll(".score-count");
+var moveMade = document.querySelector(".move-made");
 
 prepareDeck.then(function getJSON(response) {
     const json = response.json();
@@ -19,10 +20,9 @@ prepareDeck.then(function getJSON(response) {
 })
 .then(function getDeckID(json) {
     deckID = json.deck_id;
-    console.log(deckID);
 });
 
-function drawCard(selectedDeck, scoreForDeck, player) {
+function drawCard(selectedDeck, player) {
     const drawCardURL = "https://deckofcardsapi.com/api/deck/" + deckID + "/draw/?count=1"
 
     fetch(drawCardURL).then(function getJSON(response) {
@@ -30,15 +30,17 @@ function drawCard(selectedDeck, scoreForDeck, player) {
         return json;
     })
     .then(function drawCard(json) {
-        var img = document.createElement("img");
+        let img = document.createElement("img");
         img.src = json.cards[0].image;
+
+        let cardScore = 0;
         
-        json.cards[0].value.match(/[A-Z]/g) !== null ? scoreForDeck =  scoreForDeck + 10: scoreForDeck = scoreForDeck + Number(json.cards[0].value);
+        json.cards[0].value.match(/[A-Z]/g) !== null ? cardScore += 10: cardScore += Number(json.cards[0].value);
         
         if(player === "human") {
-            scoreCount[1].innerText = Number(scoreCount[1].innerText) + scoreForDeck;
+            scoreCount[1].innerText = Number(scoreCount[1].innerText) + cardScore;
         } else {
-            scoreCount[0].innerText = Number(scoreCount[0].innerText) + scoreForDeck;
+            scoreCount[0].innerText = Number(scoreCount[0].innerText) + cardScore;
         }
         
         selectedDeck.appendChild(img);      
@@ -52,12 +54,40 @@ function resetGame(){
     scoreCount[1].textContent = "0";
 }
 
+function displayMove(player, move) {
+    moveMade.innerText = player + " move  : " + move;
+}
+
+function gameWon(player, score){
+    
+}
+
+function AIMove(){
+    let dealerScore = Number(scoreCount[0].innerText); 
+    // If the score is less than 17, then Hit. 
+    if (dealerScore < 17) {
+        drawCard(dealersDeck, "AI");
+        displayMove("AI", "Hit");
+    } else {
+        // Pick a random number between 0 and 1, If 1 is selected then Hit else Stand. 
+        if(Math.round(Math.random() * 1) === 1) {
+            drawCard(dealersDeck, "AI");
+            displayMove("AI", "Hit");
+        } else {
+            // Stand
+            displayMove("AI", "Stand")
+        }
+    }
+}
+
 
 player.addEventListener("click", function(event){
     if(event.target.tagName === "BUTTON"){
         if(event.target.innerText === "Hit"){
-            drawCard(playerDeck, playerScore, "human");
-            drawCard(dealersDeck, dealerScore, "AI");
+            drawCard(playerDeck, "human");
+            AIMove();
+        } else if(event.target.innerText === "Stand") {
+            AIMove();
         } else if (event.target.innerText === "Play Again") {
             resetGame();
         }
