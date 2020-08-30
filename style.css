@@ -86,6 +86,6 @@ body {
     width: 30px;
 }
 
-.ace-btn-disabled {
+.btn-disabled {
     background-color: rgb(204, 204, 204);
 }

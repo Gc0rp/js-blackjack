@@ -67,32 +67,44 @@ function drawCard(selectedDeck, player) {
 
             div.appendChild(aceButton_one);
 
-            disableButtons();
-
-            div.addEventListener('click', function pointClicked() {
-                if(event.target.tagName === "BUTTON") {
-                    if(event.target.textContent === "1") {
-                        displayScore(player, 1);
-
-                        aceButton_one.disabled = true;
-                        aceButton_eleven.disabled = true;
-                        
-                        aceButton_one.classList.add("ace-btn-disabled");
-                        aceButton_eleven.classList.add("ace-btn-disabled");
-                        enableButtons();
-
-                    } else if (event.target.textContent === "11") {
-                        displayScore(player, 11);
-                        
-                        aceButton_one.disabled = true;
-                        aceButton_eleven.disabled = true;
-                        
-                        aceButton_one.classList.add("ace-btn-disabled");
-                        aceButton_eleven.classList.add("ace-btn-disabled");
-                        enableButtons();
-                    }
+            if(player === "AI") {
+                if(11 + Number(scoreCount[0].innerText) <= 21) {
+                    displayScore("AI", 11)
+                } else {
+                    displayScore("AI", 1)
                 }
-            });
+
+                aceButton_one.classList.add("btn-disabled");
+                aceButton_eleven.classList.add("btn-disabled");
+            } else {  
+                disableButtons();              
+                div.addEventListener('click', function pointClicked() {
+                    if(event.target.tagName === "BUTTON") {
+
+                        
+                        if(event.target.textContent === "1") {
+                            displayScore(player, 1);
+
+                            aceButton_one.disabled = true;
+                            aceButton_eleven.disabled = true;
+                            
+                            aceButton_one.classList.add("btn-disabled");
+                            aceButton_eleven.classList.add("btn-disabled");
+                            enableButtons();
+                        } else if (event.target.textContent === "11") {
+                            displayScore(player, 11);
+                            
+                            aceButton_one.disabled = true;
+                            aceButton_eleven.disabled = true;
+                            
+                            aceButton_one.classList.add("btn-disabled");
+                            aceButton_eleven.classList.add("btn-disabled");
+                            enableButtons();
+                        }
+                    }
+                });
+            }
+
 
             div.appendChild(aceButton_eleven);
 
@@ -124,22 +136,28 @@ function displayMove(player, move) {
 function disableButtons() {
     hit.disabled = true;
     stand.disabled = true;
+
+    hit.classList.add("btn-disabled");
+    stand.classList.add("btn-disabled");
 }
 
 function enableButtons() {
     hit.disabled = false;
     stand.disabled = false;
+
+    hit.classList.remove("btn-disabled");
+    stand.classList.remove("btn-disabled");
 }
 
 function gameWon(player, score) {
     if(score == 21) {
         display.innerText = player + " wins. ";
         disableButtons();
-        setTimeout(resetGame, 1000);
+        // setTimeout(resetGame, 1000);
     } else if (score > 21) {
         display.innerText = "Bust. " + player + " looses.";
         disableButtons();
-        setTimeout(resetGame, 1000);
+        // setTimeout(resetGame, 1000);
     }
 }
 
